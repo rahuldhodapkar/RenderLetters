@@ -1,0 +1,12 @@
+# editor artifacts
+*.swp
+*.swo
+
+# the classic
+.DS_Store
+
+# generated images
+*.png
+
+# compiled binaries
+render
