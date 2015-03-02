@@ -47,7 +47,9 @@ void generateglyph(char* glyph, char* filename) {
 	cairo_surface_destroy(surface);
 }
 
-void buildchar(char **cs, unsigned long long data) { 
+char *buildchar(unsigned long long data) { 
+    char *cs = new char[6];
+    
     printf("trying to build charater\n");
     unsigned char mnmask = BOOST_BINARY(   111111 );
     unsigned char mnpre  = BOOST_BINARY( 10000000 );
@@ -91,13 +93,14 @@ void buildchar(char **cs, unsigned long long data) {
         printf("unencodable number passed\n");
     }
 
-    (*cs)[nSeq + 1] = '\0';   // null terminate C string
+    printf("writing string terminator at %d\n", nSeq + 1);
+    cs[nSeq + 1] = '\0';   // null terminate C string
 
     unsigned char val;
     for (int i = nSeq; i > 0; i--) { 
         val = data & mnmask;
         val = val + mnpre;
-        (*cs)[nSeq + i] = val;
+        cs[i] = val;
         
         printf("writing %x at %d\n", val, i);
 
@@ -109,7 +112,9 @@ void buildchar(char **cs, unsigned long long data) {
 
     printf("writing %x at 0\n", val);
 
-    (*cs)[0] = val;
+    cs[0] = val;
+
+    return cs;
 }
 
 int main(int argv, char** argc) {
@@ -123,10 +128,12 @@ int main(int argv, char** argc) {
 
     printf("glyph is : %llx\n", glyphData);
 
-    buildchar(&name, glyphData);
-    strcpy(name, "Ɯ");
+    name = buildchar(glyphData);
+    //strcpy(name, "Ɯ");
 
-    for(int i = 0; i < strlen(name); i++) { 
+    printf("generated glyph of length %lu\n", strlen(name));
+
+    for(int i = 0; i < 4; i++) { 
         printf("%x ", (unsigned char) name[i]);
     }
     printf("\n");
