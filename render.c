@@ -45,6 +45,28 @@ void generateglyph(char* glyph, char* filename) {
 	cairo_surface_destroy(surface);
 }
 
+void buildchar(char **cs, unsigned long long i) { 
+    if (i < (1 << 8)) {
+        // 1 byte seq.
+        
+    }
+    else if (i < (1 << 12)) {
+        // 2 byte seq.
+
+    }
+    else if (i < (1 << 17)) {
+        // 3 byte seq.
+
+    }
+    else if (i < (1 << 22)) { 
+        // 4 byte seq.
+
+    }
+    else {
+        printf("unencodable number passed\n");
+    }
+}
+
 int main(int argv, char** argc) {
     generateglyph("name", "a.png");
 }
