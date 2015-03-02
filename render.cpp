@@ -3,6 +3,7 @@
  * system. 
  */
 
+#include <boost/utility/binary.hpp>
 #include <stdio.h>
 #include <pango/pangocairo.h>
 #include <string.h>
@@ -46,26 +47,69 @@ void generateglyph(char* glyph, char* filename) {
 	cairo_surface_destroy(surface);
 }
 
-void buildchar(char **cs, unsigned long long i) { 
-    if (i < (1 << 8)) {
+void buildchar(char **cs, unsigned long long data) { 
+    printf("trying to build charater\n");
+    unsigned char mnmask = BOOST_BINARY(   111111 );
+    unsigned char mnpre  = BOOST_BINARY( 10000000 );
+
+    int nSeq = 0; 
+    unsigned char capMask = 0;
+    unsigned char capPre = 0;
+
+    if (data < (1 << 8)) {
+        printf("captured on 1 byte seq\n");
         // 1 byte seq.
-        
+        capMask = BOOST_BINARY(  1111111 );
+        capPre  = BOOST_BINARY(        0 );
+        nSeq = 0;
     }
-    else if (i < (1 << 12)) {
+    else if (data < (1 << 12)) {
+        printf("captured on 2 byte seq\n");
         // 2 byte seq.
+        capMask = BOOST_BINARY(    11111 );
+        capPre  = BOOST_BINARY( 11000000 );
 
+        nSeq = 1;
     }
-    else if (i < (1 << 17)) {
+    else if (data < (1 << 17)) {
+        printf("captured on 3 byte seq\n");
         // 3 byte seq.
+        capMask = BOOST_BINARY(     1111 );
+        capPre  = BOOST_BINARY( 11100000 );
 
+        nSeq = 2;
     }
-    else if (i < (1 << 22)) { 
+    else if (data < (1 << 22)) { 
+        printf("captured on 4 byte seq\n");
         // 4 byte seq.
+        capMask = BOOST_BINARY(      111 );
+        capPre  = BOOST_BINARY( 11110000 );
 
+        nSeq = 3;
     }
     else {
         printf("unencodable number passed\n");
     }
+
+    (*cs)[nSeq + 1] = '\0';   // null terminate C string
+
+    unsigned char val;
+    for (int i = nSeq; i > 0; i--) { 
+        val = data & mnmask;
+        val = val + mnpre;
+        (*cs)[nSeq + i] = val;
+        
+        printf("writing %x at %d\n", val, i);
+
+        data = data >> 6;
+    }
+
+    val = data & capMask;
+    val = val + capPre;
+
+    printf("writing %x at 0\n", val);
+
+    (*cs)[0] = val;
 }
 
 int main(int argv, char** argc) {
@@ -73,8 +117,19 @@ int main(int argv, char** argc) {
     char *name = new char[5];
     char *loc = new char[6];
 
-    strcpy(name, "name");
     strcpy(loc, "a.png");
+
+    unsigned long long glyphData = 0x019c; 
+
+    printf("glyph is : %llx\n", glyphData);
+
+    buildchar(&name, glyphData);
+    strcpy(name, "Ɯ");
+
+    for(int i = 0; i < strlen(name); i++) { 
+        printf("%x ", (unsigned char) name[i]);
+    }
+    printf("\n");
 
     generateglyph(name, loc);
 
