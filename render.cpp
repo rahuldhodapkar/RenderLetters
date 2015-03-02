@@ -13,11 +13,11 @@ void rendertext(cairo_t *cr, char* data) {
 	PangoLayout *layout;
 	PangoFontDescription *desc;
 
-	cairo_translate(cr, 10, 20);
+	cairo_translate(cr, 10, 10);
 	layout = pango_cairo_create_layout(cr);
 
     pango_layout_set_text(layout, data, -1);
-	desc = pango_font_description_from_string("Sans Bold 12");
+	desc = pango_font_description_from_string(FONT_STYLE_AND_SIZE);
 	pango_layout_set_font_description(layout, desc);
 	pango_font_description_free(desc);
 
