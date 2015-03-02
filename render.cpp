@@ -58,14 +58,14 @@ char *buildchar(unsigned long long data) {
     unsigned char capMask = 0;
     unsigned char capPre = 0;
 
-    if (data < (1 << 8)) {
+    if (data < (1 << 7)) {
         printf("captured on 1 byte seq\n");
         // 1 byte seq.
         capMask = BOOST_BINARY(  1111111 );
         capPre  = BOOST_BINARY(        0 );
         nSeq = 0;
     }
-    else if (data < (1 << 12)) {
+    else if (data < (1 << 11)) {
         printf("captured on 2 byte seq\n");
         // 2 byte seq.
         capMask = BOOST_BINARY(    11111 );
@@ -73,7 +73,7 @@ char *buildchar(unsigned long long data) {
 
         nSeq = 1;
     }
-    else if (data < (1 << 17)) {
+    else if (data < (1 << 16)) {
         printf("captured on 3 byte seq\n");
         // 3 byte seq.
         capMask = BOOST_BINARY(     1111 );
@@ -81,7 +81,7 @@ char *buildchar(unsigned long long data) {
 
         nSeq = 2;
     }
-    else if (data < (1 << 22)) { 
+    else if (data < (1 << 21)) { 
         printf("captured on 4 byte seq\n");
         // 4 byte seq.
         capMask = BOOST_BINARY(      111 );
@@ -119,17 +119,14 @@ char *buildchar(unsigned long long data) {
 
 int main(int argv, char** argc) {
 
-    char *name = new char[5];
     char *loc = new char[6];
-
     strcpy(loc, "a.png");
-
-    unsigned long long glyphData = 0x019c; 
-
+    unsigned long long glyphData = 0x0A8A; 
     printf("glyph is : %llx\n", glyphData);
 
-    name = buildchar(glyphData);
-    //strcpy(name, "Ɯ");
+    char *name = new char[15];
+    name = buildchar(glyphData); 
+    //name = strcpy(name, "ઊ"); 
 
     printf("generated glyph of length %lu\n", strlen(name));
 
