@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <pango/pangocairo.h>
+#include <string.h>
 #include "consts.h"
 
 void rendertext(cairo_t *cr, char* data) {
@@ -68,5 +69,15 @@ void buildchar(char **cs, unsigned long long i) {
 }
 
 int main(int argv, char** argc) {
-    generateglyph("name", "a.png");
+
+    char *name = new char[5];
+    char *loc = new char[6];
+
+    strcpy(name, "name");
+    strcpy(loc, "a.png");
+
+    generateglyph(name, loc);
+
+    delete name;
+    delete loc;
 }
