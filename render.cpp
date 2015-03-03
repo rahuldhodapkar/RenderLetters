@@ -9,6 +9,27 @@
 #include <string.h>
 #include "consts.h"
 
+static void
+list_fonts ()
+{
+    int i;
+    PangoFontFamily ** families;
+    int n_families;
+    PangoFontMap * fontmap;
+
+    fontmap = pango_cairo_font_map_get_default();
+    pango_font_map_list_families (fontmap, & families, & n_families);
+    printf ("There are %d families\n", n_families);
+    for (i = 0; i < n_families; i++) {
+        PangoFontFamily * family = families[i];
+        const char * family_name;
+
+        family_name = pango_font_family_get_name (family);
+        printf ("Family %d: %s\n", i, family_name);
+    }
+    g_free (families);
+}
+
 void rendertext(cairo_t *cr, char* data) {
 	PangoLayout *layout;
 	PangoFontDescription *desc;
@@ -18,10 +39,10 @@ void rendertext(cairo_t *cr, char* data) {
 
     pango_layout_set_text(layout, data, -1);
 	desc = pango_font_description_from_string(FONT_STYLE_AND_SIZE);
-	pango_layout_set_font_description(layout, desc);
+    pango_layout_set_font_description(layout, desc);
 	pango_font_description_free(desc);
-
-	cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+    
+    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
 	pango_cairo_update_layout(cr, layout);
 	pango_cairo_show_layout(cr, layout);
 
@@ -118,15 +139,14 @@ char *buildchar(unsigned long long data) {
 }
 
 int main(int argv, char** argc) {
-
     char *loc = new char[6];
     strcpy(loc, "a.png");
-    unsigned long long glyphData = 0x0A8A; 
+    unsigned long long glyphData = 0x1380; 
     printf("glyph is : %llx\n", glyphData);
 
     char *name = new char[15];
     name = buildchar(glyphData); 
-    //name = strcpy(name, "ઊ"); 
+    //name = strcpy(name, "𐏈"); 
 
     printf("generated glyph of length %lu\n", strlen(name));
 
@@ -139,4 +159,6 @@ int main(int argv, char** argc) {
 
     delete name;
     delete loc;
+
+    //list_fonts();
 }
