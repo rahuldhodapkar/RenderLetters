@@ -8,6 +8,10 @@
 #include <pango/pangocairo.h>
 #include <string.h>
 #include "consts.h"
+#include <sstream>
+#include <iostream>
+#include <cstring>
+#include <string>
 
 static void
 list_fonts ()
@@ -71,7 +75,6 @@ void generateglyph(char* glyph, char* filename) {
 char *buildchar(unsigned long long data) { 
     char *cs = new char[6];
     
-    printf("trying to build charater\n");
     unsigned char mnmask = BOOST_BINARY(   111111 );
     unsigned char mnpre  = BOOST_BINARY( 10000000 );
 
@@ -80,14 +83,14 @@ char *buildchar(unsigned long long data) {
     unsigned char capPre = 0;
 
     if (data < (1 << 7)) {
-        printf("captured on 1 byte seq\n");
+        // printf("captured on 1 byte seq\n");
         // 1 byte seq.
         capMask = BOOST_BINARY(  1111111 );
         capPre  = BOOST_BINARY(        0 );
         nSeq = 0;
     }
     else if (data < (1 << 11)) {
-        printf("captured on 2 byte seq\n");
+        // printf("captured on 2 byte seq\n");
         // 2 byte seq.
         capMask = BOOST_BINARY(    11111 );
         capPre  = BOOST_BINARY( 11000000 );
@@ -95,7 +98,7 @@ char *buildchar(unsigned long long data) {
         nSeq = 1;
     }
     else if (data < (1 << 16)) {
-        printf("captured on 3 byte seq\n");
+        // printf("captured on 3 byte seq\n");
         // 3 byte seq.
         capMask = BOOST_BINARY(     1111 );
         capPre  = BOOST_BINARY( 11100000 );
@@ -103,7 +106,7 @@ char *buildchar(unsigned long long data) {
         nSeq = 2;
     }
     else if (data < (1 << 21)) { 
-        printf("captured on 4 byte seq\n");
+        // printf("captured on 4 byte seq\n");
         // 4 byte seq.
         capMask = BOOST_BINARY(      111 );
         capPre  = BOOST_BINARY( 11110000 );
@@ -114,7 +117,7 @@ char *buildchar(unsigned long long data) {
         printf("unencodable number passed\n");
     }
 
-    printf("writing string terminator at %d\n", nSeq + 1);
+    // printf("writing string terminator at %d\n", nSeq + 1);
     cs[nSeq + 1] = '\0';   // null terminate C string
 
     unsigned char val;
@@ -123,7 +126,7 @@ char *buildchar(unsigned long long data) {
         val = val + mnpre;
         cs[i] = val;
         
-        printf("writing %x at %d\n", val, i);
+        // printf("writing %x at %d\n", val, i);
 
         data = data >> 6;
     }
@@ -131,7 +134,7 @@ char *buildchar(unsigned long long data) {
     val = data & capMask;
     val = val + capPre;
 
-    printf("writing %x at 0\n", val);
+    // printf("writing %x at 0\n", val);
 
     cs[0] = val;
 
@@ -139,26 +142,20 @@ char *buildchar(unsigned long long data) {
 }
 
 int main(int argv, char** argc) {
-    char *loc = new char[6];
-    strcpy(loc, "a.png");
-    unsigned long long glyphData = 0x1380; 
-    printf("glyph is : %llx\n", glyphData);
+    char *name;
+    char *loc = new char[200];
 
-    char *name = new char[15];
-    name = buildchar(glyphData); 
-    //name = strcpy(name, "𐏈"); 
+    for (unsigned long long glyphData = 0x1200; glyphData <= 0x137F; glyphData++) {
+        name = buildchar(glyphData);
+        printf("%s\n", name);
 
-    printf("generated glyph of length %lu\n", strlen(name));
+        std::stringstream stringStream;
+        stringStream << "letterSet/" << name << ".png";
+        strcpy(loc, stringStream.str().c_str());
 
-    for(int i = 0; i < 4; i++) { 
-        printf("%x ", (unsigned char) name[i]);
+        generateglyph(name, loc);
+        delete name;
     }
-    printf("\n");
-
-    generateglyph(name, loc);
-
-    delete name;
     delete loc;
-
     //list_fonts();
 }
