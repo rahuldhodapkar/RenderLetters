@@ -145,7 +145,7 @@ int main(int argv, char** argc) {
     char *name;
     char *loc = new char[200];
 
-    for (unsigned long long glyphData = 0x1200; glyphData <= 0x137F; glyphData++) {
+    for (unsigned long long glyphData = 0xA980; glyphData <= 0xA9DF; glyphData++) {
         name = buildchar(glyphData);
         printf("%s\n", name);
 
@@ -157,5 +157,5 @@ int main(int argv, char** argc) {
         delete name;
     }
     delete loc;
-    //list_fonts();
+    list_fonts();
 }

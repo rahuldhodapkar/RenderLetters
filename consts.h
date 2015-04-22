@@ -3,7 +3,7 @@
  */
 
 // the glyph size in pixels.
-const int GLYPH_SIZE = 120;
+const int GLYPH_SIZE = 80;
 
-const char * FONT_STYLE_AND_SIZE = "Abyssinica SIL 50";
+const char * FONT_STYLE_AND_SIZE = "Arial Unicode MS 50";
 
