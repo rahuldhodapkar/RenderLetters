@@ -24,13 +24,13 @@ bar = progressbar.ProgressBar(maxval=NUM_SAMPLES, \
     widgets=[progressbar.Bar('=', '[', ']'), ' ', \
     progressbar.Percentage()]).start()
 
-i = 1
+i = 0
 with open(SAMPLE_FILENAME, 'r') as f:
     call(["mkdir", "processed/{}/".format(OUTFILE_FOLDERNAME)])
     for line in f:
         call(["render/render", str(RENDER_WIDTH), str(RENDER_HEIGHT),
               FONT_STYLE_AND_SIZE, line,
-              "processed/{}/{}.png".format(OUTFILE_FOLDERNAME, str(i))])
+              "processed/{}/{}.png".format(OUTFILE_FOLDERNAME, str(i + 1))])
         i = i + 1
         bar.update(i)
 
