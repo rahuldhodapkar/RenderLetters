@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import glob
 
+import json
+
 from subprocess import call
 import sys
 
@@ -45,14 +47,10 @@ pca.fit(X)
 call(["mkdir", "results/{}".format(NAME_ROOT)])
 call(["mkdir", "results/{}/data".format(NAME_ROOT)])
 
-dataOut = open("results/{}/data/summary.csv".format(NAME_ROOT), "w")
-
-for i in range(0, NUM_PCA_COMPS):
-    print >>dataOut, "{}, {}, {}".format(i, pca.components_[i],
-            pca.explained_variance_ratio_[i])
-
-#print pca.components_
-#print pca.explained_variance_ratio_
+with open("results/{}/data/summary.json".format(NAME_ROOT), "w") as out:
+    json.dump({"components":pca.components_.tolist(),
+               "explained_variance_ratio":pca.explained_variance_ratio_.tolist()},
+               out)
 
 call(["mkdir", "results/{}/eigs".format(NAME_ROOT)])
 
