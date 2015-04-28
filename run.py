@@ -12,14 +12,20 @@ NUM_SAMPLES_FROM_RAW = 1000
 SAMPLE_LENGTH_FROM_RAW = 8
 
 ## Render Stage Constants
+RENDER_HEIGHT = 80
+RENDER_WIDTH = 80
 
-rawTexts = [("bible-english-nt.txt", "Times New Roman"),
-            ("bible-korean-nt.txt", "Times New Roman")]
+rawTexts = [("bible-english-nt", "ENG" ,"Times New Roman 30"),
+            ("bible-korean-nt", "KRN" ,"Times New Roman 30")]
 
-for (fileName, font) in rawTexts:
-    print "[Generate Samples][{}]".format(fileName)
-    call(['./sampler.py', "rawCorpus/" + fileName, str(NUM_SAMPLES_FROM_RAW),
-          str(SAMPLE_LENGTH_FROM_RAW), "corpus/" + "samp-" + fileName])
+for (fileNameRoot, prefix, fontStyleSize) in rawTexts:
+    print "[Generate Samples][{}]".format(fileNameRoot)
+    call(["./sampler.py",
+        "rawCorpus/" + fileNameRoot + ".txt", str(NUM_SAMPLES_FROM_RAW),
+        str(SAMPLE_LENGTH_FROM_RAW),
+        "corpus/" + "samp-" + fileNameRoot + ".txt"])
 
-
+    call(["./builder.py", "corpus/" + "samp-" + fileNameRoot + ".txt",
+          prefix, fontStyleSize, str(RENDER_HEIGHT), str(RENDER_WIDTH),
+          fileNameRoot])
 
