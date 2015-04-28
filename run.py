@@ -26,6 +26,6 @@ for (fileNameRoot, prefix, fontStyleSize) in rawTexts:
         "corpus/" + "samp-" + fileNameRoot + ".txt"])
 
     call(["./builder.py", "corpus/" + "samp-" + fileNameRoot + ".txt",
-          prefix, fontStyleSize, str(RENDER_HEIGHT), str(RENDER_WIDTH),
-          fileNameRoot])
+          str(NUM_SAMPLES_FROM_RAW), prefix, fontStyleSize,
+          str(RENDER_HEIGHT), str(RENDER_WIDTH), fileNameRoot])
 
