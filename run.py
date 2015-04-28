@@ -8,18 +8,18 @@
 from subprocess import call
 
 ## Sample Stage Constants
-NUM_SAMPLES_FROM_RAW = 10
+NUM_SAMPLES_FROM_RAW = 100
 SAMPLE_LENGTH_FROM_RAW = 8
 
 ## Render Stage Constants
-RENDER_HEIGHT = 30
-RENDER_WIDTH = 50
+RENDER_HEIGHT = 70
+RENDER_WIDTH = 10
 
 ## PCA Stage Constants
-NUM_PCA_COMPS = 5
+NUM_PCA_COMPS = 10
 
-rawTexts = [("bible-english-nt", "ENG" ,"Times New Roman 12"),
-            ("bible-korean-nt", "KRN" ,"Times New Roman 10")]
+rawTexts = [("bible-english-nt", "ENG" ,"Times New Roman 34"),
+            ("bible-korean-nt", "KRN" ,"Times New Roman 34")]
 
 for (fileNameRoot, prefix, fontStyleSize) in rawTexts:
     print "[Generate Samples][{}]".format(fileNameRoot)
