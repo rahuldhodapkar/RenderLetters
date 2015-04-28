@@ -8,7 +8,7 @@
 from subprocess import call
 
 ## Sample Stage Constants
-NUM_SAMPLES_FROM_RAW = 100
+NUM_SAMPLES_FROM_RAW = 1000
 SAMPLE_LENGTH_FROM_RAW = 8
 
 ## Render Stage Constants
@@ -38,6 +38,7 @@ for (fileNameRoot, prefix, fontStyleSize) in rawTexts:
           fileNameRoot, str(NUM_PCA_COMPS),
           str(RENDER_HEIGHT), str(RENDER_WIDTH)])
 
-
-
+    print "[RUN YVAR][{}]".format(fileNameRoot)
+    call(["./yvar.py", "processed/" + fileNameRoot,
+          fileNameRoot, str(RENDER_HEIGHT), str(RENDER_WIDTH)])
 
